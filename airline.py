@@ -140,52 +140,55 @@ with st.container(border=True):
         classes = clf.classes_
         pred_idx = np.where(classes == pred_label)[0][0]      # finds the matching column
         confidence = float(proba[0, pred_idx]) * 100 
-
         st.write(f"With a confidence of {confidence}%")
+                
+        st.markdown("<h3 style='text-align: center; color: light gray;'>Customer Demographic Analysis</h3>", unsafe_allow_html=True)
+
+    # Customer Type Comparison
+        percent_customer_type = round((default_df['customer_type'] == customer_type).mean() * 100, 2)
+        
+        with st.expander("**Customer Type Comparison**"):
+            st.write(f"Customer Type: Your selection: {customer_type}")
+            st.write(f"Percentage of our fliers with this selection: **{percent_customer_type}%**")
+
+            # Type of travel comparison
+
+        percent_travel_type = round((default_df['type_of_travel'] == travel_type).mean() * 100, 2)
+
+        with st.expander("**Travel Type Comparison**"):
+            st.write(f"Customer Type: Your selection: {travel_type}")
+            st.write(f"Percentage of our fliers with this selection: **{percent_travel_type}%**")
+
+        # Flight Class Comparison
+        percent_flight_class = round((default_df['class'] == flight_class).mean() * 100, 2)
+
+        with st.expander("**Flight Class Comparison**"):
+            st.write(f"Customer Type: Your selection: {flight_class}")
+            st.write(f"Percentage of our fliers with this selection: **{percent_flight_class}%**")
+
+        # Age Group Comparison
+        if age < 18:
+            age_group = 'Under 18'
+        elif 18 <= age < 30:
+            age_group = '18-29'
+        elif 30 <= age < 45:
+            age_group = '30-44'
+        elif 45 <= age < 60:
+            age_group = '45-59'
+        else:
+            age_group = '60 and above'
+
+        age_bins = [0, 18, 30, 45, 60, 100]
+        age_labels = ['Under 18', '18-29', '30-44', '45-59', '60 and above']
+        default_df['age_group'] = pd.cut(default_df['age'], bins=age_bins, labels=age_labels, right=False)
+        percent_age_group = round((default_df['age_group'] == age_group).mean() * 100, 2) 
+        with st.expander("**Age Group Comparison**"):
+            st.write(f"Customer Age Group: Your selection: {age_group}")
+            st.write(f"Percentage of our fliers in this age group: **{percent_age_group}%**")
     else:
         st.info("Please fill out the survey form and click **Predict** to see the results.")
 
 
-    st.markdown("<h3 style='text-align: center; color: light gray;'>Customer Demographic Analysis</h3>", unsafe_allow_html=True)
+    
 
-    # Customer Type Comparison
-    percent_customer_type = round((default_df['customer_type'] == customer_type).mean() * 100, 2)
-
-    with st.expander("**Customer Type Comparison**"):
-        st.write(f"Customer Type: Your selection: {customer_type}")
-        st.write(f"Percentage of our fliers with this selection: **{percent_customer_type}%**")
-
-    # Type of travel comparison
-
-    percent_travel_type = round((default_df['type_of_travel'] == travel_type).mean() * 100, 2)
-
-    with st.expander("**Travel Type Comparison**"):
-        st.write(f"Customer Type: Your selection: {travel_type}")
-        st.write(f"Percentage of our fliers with this selection: **{percent_travel_type}%**")
-
-    # Flight Class Comparison
-    percent_flight_class = round((default_df['class'] == flight_class).mean() * 100, 2)
-
-    with st.expander("**Flight Class Comparison**"):
-        st.write(f"Customer Type: Your selection: {flight_class}")
-        st.write(f"Percentage of our fliers with this selection: **{percent_flight_class}%**")
-
-    # Age Group Comparison
-    if age < 18:
-        age_group = 'Under 18'
-    elif 18 <= age < 30:
-        age_group = '18-29'
-    elif 30 <= age < 45:
-        age_group = '30-44'
-    elif 45 <= age < 60:
-        age_group = '45-59'
-    else:
-        age_group = '60 and above'
-
-    age_bins = [0, 18, 30, 45, 60, 100]
-    age_labels = ['Under 18', '18-29', '30-44', '45-59', '60 and above']
-    default_df['age_group'] = pd.cut(default_df['age'], bins=age_bins, labels=age_labels, right=False)
-    percent_age_group = round((default_df['age_group'] == age_group).mean() * 100, 2) 
-    with st.expander("**Age Group Comparison**"):
-        st.write(f"Customer Age Group: Your selection: {age_group}")
-        st.write(f"Percentage of our fliers in this age group: **{percent_age_group}%**")
+    
